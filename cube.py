@@ -43,5 +43,4 @@ class Cube:
             20, 21, 22, 22, 23, 20
         ], dtype=np.uint32)
 
-if __name__ == "__main__":
-    cube = Cube()
+cube = Cube()

@@ -1,10 +1,11 @@
+# game_object.py
 from OpenGL.GL import *
 import pyrr
 import os
 import numpy as np
 from TextureLoader import load_texture
 from settings import TEXTURE_FOLDER
-
+from cube import cube
 class GameObject:
     def __init__(self, position, texture_name, rotation=np.zeros(3)):
         self.position = position
@@ -18,7 +19,7 @@ class GameObject:
         self.rotation_matrix_y = pyrr.matrix44.create_from_y_rotation(self.rotation[1])
         self.rotation_matrix_z = pyrr.matrix44.create_from_z_rotation(self.rotation[2])
 
-    def render(self, model_loc, cube):
+    def render(self, model_loc):
 
         model = self.translation_matrix @ self.rotation_matrix_x @ self.rotation_matrix_y @ self.rotation_matrix_z
         glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
@@ -37,4 +38,3 @@ class GameObject:
         self.rotation_matrix_x = pyrr.matrix44.create_from_x_rotation(self.rotation[0])
         self.rotation_matrix_y = pyrr.matrix44.create_from_y_rotation(self.rotation[1])
         self.rotation_matrix_z = pyrr.matrix44.create_from_z_rotation(self.rotation[2])
-

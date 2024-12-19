@@ -1,3 +1,4 @@
+# framebuffer.py
 from OpenGL.GL import *
 import pyrr
 
@@ -5,7 +6,6 @@ import pyrr
 def setup_framebuffer(FBO, width, height):
     glBindFramebuffer(GL_FRAMEBUFFER, FBO)
 
-    # Create a depth attachment
     depth_texture = glGenTextures(1)
     glBindTexture(GL_TEXTURE_2D, depth_texture)
     glTexImage2D(
@@ -22,8 +22,6 @@ def setup_framebuffer(FBO, width, height):
     glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture, 0
     )
-
-    # Set the draw buffer and read buffer
     glDrawBuffer(GL_NONE)
     glReadBuffer(GL_NONE)
 
