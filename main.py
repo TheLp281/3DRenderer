@@ -26,7 +26,7 @@ class Game:
         for i in range(GRID_SIZE[0]):
             for j in range(GRID_SIZE[1]):
                 position = (i * self.TILE_SPACING, j * self.TILE_SPACING, 0.0)
-                self.objects.append(GameObject(position, "brick.jpg", rotation=(90, 0, 0)))
+                self.objects.append(GameObject(position, "brick.jpg", rotation=(90, 0, 0),scale=(5,5,5)))
 
     def handle_input(self):
         keys = pygame.key.get_pressed()

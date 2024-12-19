@@ -20,8 +20,11 @@ fragment_shader = """
 in vec2 fragTexCoord;
 out vec4 color;
 uniform sampler2D texture1;
+uniform float wrap_factor;
+
 void main()
 {
-    color = texture(texture1, fragTexCoord);
+    vec2 tiled_coords = fragTexCoord * wrap_factor;
+    color = texture(texture1, tiled_coords);
 }
 """

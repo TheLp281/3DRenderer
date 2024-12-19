@@ -79,4 +79,4 @@ class Renderer:
         glUniformMatrix4fv(glGetUniformLocation(self.shader, "view"), 1, GL_FALSE, view)
 
         for obj in objects:
-            obj.render(glGetUniformLocation(self.shader, "model"))
+            obj.render(glGetUniformLocation(self.shader, "model"), self.shader)
