@@ -17,9 +17,9 @@ class Renderer:
         self._setup_opengl()
         self._create_cube()
 
-        self.camera_pos = pyrr.Vector3([0.0, 0.0, 3.0])
-        self.camera_front = pyrr.Vector3([0.0, 0.0, -1.0])
-        self.camera_up = pyrr.Vector3([0.0, 1.0, 0.0])
+        self.camera_pos = Vector3([0.0, 0.0, 3.0])
+        self.camera_front = Vector3([0.0, 0.0, -1.0])
+        self.camera_up = Vector3([0.0, 1.0, 0.0])
 
         self.YAW = -90.0  
         self.PITCH = 0.0 
@@ -71,10 +71,10 @@ class Renderer:
         glClearColor(0, 0.1, 0.1, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        projection = pyrr.matrix44.create_perspective_projection_matrix(
+        projection = matrix44.create_perspective_projection_matrix(
             FOV, W_WIDTH / W_HEIGHT, 0.1, DRAW_DISTANCE
         )
-        view = pyrr.matrix44.create_look_at(self.camera_pos, self.camera_pos + self.camera_front, self.camera_up)
+        view = matrix44.create_look_at(self.camera_pos, self.camera_pos + self.camera_front, self.camera_up)
 
         glUniformMatrix4fv(glGetUniformLocation(self.shader, "projection"), 1, GL_FALSE, projection)
         glUniformMatrix4fv(glGetUniformLocation(self.shader, "view"), 1, GL_FALSE, view)

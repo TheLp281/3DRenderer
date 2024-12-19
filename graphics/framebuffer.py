@@ -1,6 +1,5 @@
 # framebuffer.py
 from OpenGL.GL import *
-import pyrr
 
 
 def setup_framebuffer(FBO, width, height):
@@ -49,7 +48,7 @@ def draw_to_framebuffer(
     num_colors = len(pick_colors)
     for i in range(len(cube_positions)):
         if i < num_colors:
-            pick_model = pyrr.matrix44.create_from_translation(cube_positions[i])
+            pick_model = .matrix44.create_from_translation(cube_positions[i])
             glUniform3iv(color_location, 1, pick_colors[i])
             glUniformMatrix4fv(model_location, 1, GL_FALSE, pick_model)
             glDrawElements(GL_TRIANGLES, len(cube.indices), GL_UNSIGNED_INT, None)

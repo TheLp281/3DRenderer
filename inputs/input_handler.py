@@ -1,6 +1,6 @@
 # input_handler.py
 import pygame
-import pyrr
+from pyrr import Vector3, vector,vector3
 from settings import WALK_SPEED, SPRINT_MULTIPLIER, SENSITIVITY, YAW, PITCH
 from math import cos, radians, sin
 
@@ -9,7 +9,7 @@ class InputHandler:
         self.last_mouse_pos = None
 
     def process_input(self, keys, camera_pos, camera_front, camera_up):
-        camera_right = pyrr.vector3.normalize(pyrr.vector3.cross(camera_front, camera_up))
+        camera_right = vector3.normalize(vector3.cross(camera_front, camera_up))
 
         sprint_multiplier = SPRINT_MULTIPLIER if keys[pygame.K_LSHIFT] else 1
         movement_speed = WALK_SPEED * sprint_multiplier
@@ -23,14 +23,14 @@ class InputHandler:
         if keys[pygame.K_d]:
             camera_pos += movement_speed * camera_right
 
-        front = pyrr.Vector3(
+        front = Vector3(
             [
                 cos(radians(YAW)) * cos(radians(PITCH)),
                 sin(radians(PITCH)),
                 sin(radians(YAW)) * cos(radians(PITCH)),
             ]
         )
-        camera_front = pyrr.vector.normalize(front)
+        camera_front = vector.normalize(front)
 
         return camera_pos, camera_front
 
@@ -62,14 +62,14 @@ class InputHandler:
 
         yaw %= 360
 
-        front = pyrr.Vector3(
+        front = Vector3(
             [
                 cos(radians(yaw)) * cos(radians(pitch)),
                 sin(radians(pitch)),
                 sin(radians(yaw)) * cos(radians(pitch)),
             ]
         )
-        camera_front = pyrr.vector.normalize(front)
+        camera_front = vector.normalize(front)
 
         return yaw, pitch, camera_front
 
