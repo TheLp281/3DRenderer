@@ -1,38 +1,21 @@
 # input_handler.py
 import pygame
-from pyrr import Vector3, vector,vector3
-from settings import WALK_SPEED, SPRINT_MULTIPLIER, SENSITIVITY, YAW, PITCH
-from math import cos, radians, sin
-
+from pyrr import vector3
+from settings import SENSITIVITY
+from math import sin,cos,radians
 class InputHandler:
     def __init__(self):
         self.last_mouse_pos = None
 
-    def process_input(self, keys, camera_pos, camera_front, camera_up):
-        camera_right = vector3.normalize(vector3.cross(camera_front, camera_up))
-
-        sprint_multiplier = SPRINT_MULTIPLIER if keys[pygame.K_LSHIFT] else 1
-        movement_speed = WALK_SPEED * sprint_multiplier
-        
-        if keys[pygame.K_w]:
-            camera_pos += movement_speed * camera_front
-        if keys[pygame.K_s]:
-            camera_pos -= movement_speed * camera_front
-        if keys[pygame.K_a]:
-            camera_pos -= movement_speed * camera_right
-        if keys[pygame.K_d]:
-            camera_pos += movement_speed * camera_right
-
-        front = Vector3(
-            [
-                cos(radians(YAW)) * cos(radians(PITCH)),
-                sin(radians(PITCH)),
-                sin(radians(YAW)) * cos(radians(PITCH)),
-            ]
-        )
-        camera_front = vector.normalize(front)
-
-        return camera_pos, camera_front
+    def process_input(self, keys):
+        movement_input = {
+            'w': keys[pygame.K_w],
+            's': keys[pygame.K_s],
+            'a': keys[pygame.K_a],
+            'd': keys[pygame.K_d],
+            'shift': keys[pygame.K_LSHIFT],
+        }
+        return movement_input
 
     def handle_events(self, yaw, pitch, camera_front):
         for event in pygame.event.get():
@@ -62,15 +45,14 @@ class InputHandler:
 
         yaw %= 360
 
-        front = Vector3(
+        front = vector3.Vector3(
             [
                 cos(radians(yaw)) * cos(radians(pitch)),
                 sin(radians(pitch)),
                 sin(radians(yaw)) * cos(radians(pitch)),
             ]
         )
-        camera_front = vector.normalize(front)
+        camera_front = vector3.normalize(front)
 
         return yaw, pitch, camera_front
-
 input_handler = InputHandler()

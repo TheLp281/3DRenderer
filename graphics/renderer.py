@@ -4,7 +4,6 @@ from OpenGL.GL.shaders import compileProgram, compileShader
 from settings import *
 from objects.cube import Cube
 from graphics.shaders import vertex_shader, fragment_shader
-from objects.cube import cube
 from pyrr import matrix44,Vector3
 from inputs.input_handler import input_handler  
 

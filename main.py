@@ -4,6 +4,7 @@ from settings import DESIRED_FPS, GRID_SIZE, W_HEIGHT, W_WIDTH
 from objects.game_object import GameObject
 from inputs.input_handler import input_handler
 from graphics.renderer import Renderer
+from character import Character
 
 class Game:
     def __init__(self):
@@ -17,7 +18,9 @@ class Game:
         self.TILE_SPACING = 1
         self._initialize_objects()
         self.renderer = Renderer()
+        self.character = Character(self.renderer.camera_pos, self.renderer.camera_up, self.renderer.camera_front)
         self.clock = pygame.time.Clock()
+        pygame.mouse.set_visible(False) 
 
     def _initialize_objects(self):
         for i in range(GRID_SIZE[0]):
@@ -27,7 +30,11 @@ class Game:
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
-        input_handler.process_input(keys, self.renderer.camera_pos, self.renderer.camera_front, self.renderer.camera_up)
+        movement_input = input_handler.process_input(keys)
+        self.character.update_position(movement_input)
+        self.character.update_camera(self.renderer.YAW, self.renderer.PITCH)
+        self.renderer.camera_pos = self.character.get_camera_pos()
+        self.renderer.camera_front = self.character.get_camera_front()
         self.renderer.handle_input()
 
     def render(self):
