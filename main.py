@@ -1,34 +1,50 @@
 import pygame
+
 pygame.init()
 import pyrr
 from math import *
-from settings import YAW, PITCH,W_WIDTH, W_HEIGHT,TEXTURE_FOLDER,FOV,WALK_SPEED,SPRINT_MULTIPLIER ,DRAW_DISTANCE,GRID_SIZE,DESIRED_FPS
+from settings import (
+    YAW,
+    PITCH,
+    W_WIDTH,
+    W_HEIGHT,
+    TEXTURE_FOLDER,
+    FOV,
+    WALK_SPEED,
+    SPRINT_MULTIPLIER,
+    DRAW_DISTANCE,
+    GRID_SIZE,
+    DESIRED_FPS,
+)
 from game_object import GameObject
 
 
 pygame.mouse.set_visible(False)
 pygame.display.set_caption("3D Renderer")
 
-# Define colors
+pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
+pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLESAMPLES, 4)
+
+
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 
 
-snap_cooldown = 100  # Cooldown time in milliseconds
 last_snap_time = pygame.time.get_ticks()
-screen = pygame.display.set_mode((W_WIDTH, W_HEIGHT), pygame.RESIZABLE | pygame.OPENGL | pygame.DOUBLEBUF)
-
+screen = pygame.display.set_mode(
+    (W_WIDTH, W_HEIGHT), pygame.RESIZABLE | pygame.OPENGL | pygame.DOUBLEBUF
+)
 
 
 objects = []
 
 
-TILE_SPACING = 1.01
+TILE_SPACING = 1
 
 for i in range(GRID_SIZE[0]):
     for j in range(GRID_SIZE[1]):
         position = (i * TILE_SPACING, j * TILE_SPACING, 0.0)
-        objects.append(GameObject(position,"brick.jpg",rotation=(90,0, 0)) )
+        objects.append(GameObject(position, "brick.jpg", rotation=(90, 0, 0)))
 
 from renderer import *
 
@@ -58,8 +74,8 @@ def handle_mouse_movement(event, yaw, pitch, camera_front):
     yaw += x_offset
     pitch += y_offset
 
-    POSITIVE_CLAMP = 89.0 
-    NEGATIVE_CLAMP = -89.0 
+    POSITIVE_CLAMP = 89.0
+    NEGATIVE_CLAMP = -89.0
     if pitch > POSITIVE_CLAMP:
         pitch = POSITIVE_CLAMP
     elif pitch < NEGATIVE_CLAMP:
@@ -67,11 +83,13 @@ def handle_mouse_movement(event, yaw, pitch, camera_front):
 
     yaw %= 360
 
-    front = pyrr.Vector3([
-        cos(radians(yaw)) * cos(radians(pitch)),
-        sin(radians(pitch)),
-        sin(radians(yaw)) * cos(radians(pitch))
-    ])
+    front = pyrr.Vector3(
+        [
+            cos(radians(yaw)) * cos(radians(pitch)),
+            sin(radians(pitch)),
+            sin(radians(yaw)) * cos(radians(pitch)),
+        ]
+    )
     camera_front = pyrr.vector.normalize(front)
 
     return yaw, pitch, camera_front
@@ -93,10 +111,18 @@ def process_input(keys):
     if keys[pygame.K_d]:
         camera_pos += WALK_SPEED * sprint_multiplier * camera_right
 
-    front = pyrr.Vector3([cos(radians(YAW)) * cos(radians(PITCH)), sin(radians(PITCH)), sin(radians(YAW)) * cos(radians(PITCH))])
+    front = pyrr.Vector3(
+        [
+            cos(radians(YAW)) * cos(radians(PITCH)),
+            sin(radians(PITCH)),
+            sin(radians(YAW)) * cos(radians(PITCH)),
+        ]
+    )
     camera_front = pyrr.vector.normalize(front)
 
+
 last_mouse_pos = None
+
 
 def handle_events(yaw, pitch, camera_front):
     for event in pygame.event.get():
@@ -104,8 +130,11 @@ def handle_events(yaw, pitch, camera_front):
             pygame.quit()
             quit()
         elif event.type == pygame.MOUSEMOTION:
-            yaw, pitch, camera_front = handle_mouse_movement(event, yaw, pitch, camera_front)
+            yaw, pitch, camera_front = handle_mouse_movement(
+                event, yaw, pitch, camera_front
+            )
     return yaw, pitch, camera_front
+
 
 running = True
 clock = pygame.time.Clock()
@@ -119,8 +148,12 @@ while running:
     glClearColor(0, 0.1, 0.1, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-    projection = pyrr.matrix44.create_perspective_projection_matrix(FOV, W_WIDTH / W_HEIGHT, 0.1, DRAW_DISTANCE)
-    view = pyrr.matrix44.create_look_at(camera_pos, camera_pos + camera_front, camera_up)
+    projection = pyrr.matrix44.create_perspective_projection_matrix(
+        FOV, W_WIDTH / W_HEIGHT, 0.1, DRAW_DISTANCE
+    )
+    view = pyrr.matrix44.create_look_at(
+        camera_pos, camera_pos + camera_front, camera_up
+    )
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
     glUniformMatrix4fv(VIEW_LOC, 1, GL_FALSE, view)
 
@@ -128,7 +161,7 @@ while running:
         obj.render(model_loc, cube)
 
     fps = clock.get_fps()
-    pygame.display.set_caption(f'FPS: {int(fps)}')
+    pygame.display.set_caption(f"FPS: {int(fps)}")
 
     pygame.draw.rect(screen, RED, (10, 10, 100, 50))
     pygame.display.flip()
@@ -136,5 +169,5 @@ while running:
     clock.tick(DESIRED_FPS)
 
 pygame.mouse.set_visible(True)
-# Quit Pygame
+
 pygame.quit()

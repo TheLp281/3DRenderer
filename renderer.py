@@ -6,8 +6,10 @@ from cube import Cube
 from shaders import vertex_shader, fragment_shader
 
 
-
-shader = compileProgram(compileShader(vertex_shader, GL_VERTEX_SHADER), compileShader(fragment_shader, GL_FRAGMENT_SHADER))
+shader = compileProgram(
+    compileShader(vertex_shader, GL_VERTEX_SHADER),
+    compileShader(fragment_shader, GL_FRAGMENT_SHADER),
+)
 # VAO and VBO
 VAO = glGenVertexArrays(1)
 glBindVertexArray(VAO)
@@ -51,11 +53,24 @@ glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indices.nbytes, cube.indices, GL_STAT
 
 # Cube vertices
 glEnableVertexAttribArray(0)
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, cube.vertices.itemsize * 5, ctypes.c_void_p(0))
-
+glVertexAttribPointer(
+    0, 3, GL_FLOAT, GL_FALSE, cube.vertices.itemsize * 5, ctypes.c_void_p(0)
+)
 # Cube textures
 glEnableVertexAttribArray(1)
-glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, cube.vertices.itemsize * 5, ctypes.c_void_p(12))
+glVertexAttribPointer(
+    1, 2, GL_FLOAT, GL_FALSE, cube.vertices.itemsize * 5, ctypes.c_void_p(12)
+)
+glEnable(GL_MULTISAMPLE)
+
+
+max_anisotropy = glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY)
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, max_anisotropy)
+
+
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+
 
 glUseProgram(shader)
 glClearColor(0, 0.1, 0.1, 1)
@@ -63,5 +78,9 @@ glEnable(GL_DEPTH_TEST)
 glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
-projection = pyrr.matrix44.create_perspective_projection_matrix(45, W_WIDTH / W_HEIGHT, 0.1, 100)
+projection = pyrr.matrix44.create_perspective_projection_matrix(
+    FOV, W_WIDTH / W_HEIGHT, 0.1, DRAW_DISTANCE
+)
+
 view = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, 0.0]))
+
