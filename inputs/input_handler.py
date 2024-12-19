@@ -9,19 +9,19 @@ class InputHandler:
         self.last_mouse_pos = None
 
     def process_input(self, keys, camera_pos, camera_front, camera_up):
-        sprint_multiplier = 1
-        if keys[pygame.K_LSHIFT]:
-            sprint_multiplier = SPRINT_MULTIPLIER
-
         camera_right = pyrr.vector3.normalize(pyrr.vector3.cross(camera_front, camera_up))
+
+        sprint_multiplier = SPRINT_MULTIPLIER if keys[pygame.K_LSHIFT] else 1
+        movement_speed = WALK_SPEED * sprint_multiplier
+        
         if keys[pygame.K_w]:
-            camera_pos += WALK_SPEED * sprint_multiplier * camera_front
+            camera_pos += movement_speed * camera_front
         if keys[pygame.K_s]:
-            camera_pos -= WALK_SPEED * sprint_multiplier * camera_front
+            camera_pos -= movement_speed * camera_front
         if keys[pygame.K_a]:
-            camera_pos -= WALK_SPEED * sprint_multiplier * camera_right
+            camera_pos -= movement_speed * camera_right
         if keys[pygame.K_d]:
-            camera_pos += WALK_SPEED * sprint_multiplier * camera_right
+            camera_pos += movement_speed * camera_right
 
         front = pyrr.Vector3(
             [
@@ -58,12 +58,7 @@ class InputHandler:
         yaw += x_offset
         pitch += y_offset
 
-        POSITIVE_CLAMP = 89.0
-        NEGATIVE_CLAMP = -89.0
-        if pitch > POSITIVE_CLAMP:
-            pitch = POSITIVE_CLAMP
-        elif pitch < NEGATIVE_CLAMP:
-            pitch = NEGATIVE_CLAMP
+        pitch = max(min(pitch, 89.0), -89.0)
 
         yaw %= 360
 

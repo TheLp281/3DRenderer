@@ -1,3 +1,4 @@
+# renderer.py
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 from settings import *
