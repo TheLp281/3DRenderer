@@ -31,7 +31,7 @@ class Renderer:
         light_diffuse = [0.5, 0.5, 0.5]
         light_specular = [1.0, 1.0, 1.0]
         view_position = [0.0, 5.0, 1.0]
-        shininess = 32.0
+        shininess = 1
 
         glUniform3fv(glGetUniformLocation(self.shader, "light.position"), 1, light_position)
         glUniform3fv(glGetUniformLocation(self.shader, "light.ambient"), 1, light_ambient)

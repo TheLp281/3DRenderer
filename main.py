@@ -4,7 +4,9 @@ from settings import DESIRED_FPS, GRID_SIZE, W_HEIGHT, W_WIDTH
 from objects.game_object import GameObject
 from inputs.input_handler import input_handler
 from graphics.renderer import Renderer
+from graphics.material import Material,PREDEFINED_COLORS
 from character import Character
+import random
 
 class Game:
     def __init__(self):
@@ -22,11 +24,30 @@ class Game:
         self.clock = pygame.time.Clock()
         pygame.mouse.set_visible(False) 
 
+
+
     def _initialize_objects(self):
         for i in range(GRID_SIZE[0]):
             for j in range(GRID_SIZE[1]):
-                position = (i * self.TILE_SPACING, j * self.TILE_SPACING, 0.0)
-                self.objects.append(GameObject(position, "brick.jpg", rotation=(90, 0, 0),scale=(5,5,5)))
+                offset_x = random.uniform(-1, 1) 
+                offset_y = random.uniform(-1, 1) 
+                position = (i * self.TILE_SPACING + offset_x, 
+                            j * self.TILE_SPACING + offset_y, 0.0)
+                        
+                rotation_x = random.uniform(85, 95)
+                rotation_y = random.uniform(0, 180)
+                rotation_z = random.uniform(0, 180)
+                scale_x = random.uniform(4.5, 5.5)
+                scale_y = random.uniform(4.5, 5.5)
+                scale_z = random.uniform(4.5, 5.5)
+                scale = (scale_x, scale_y, scale_z)
+
+                random_color = random.choice(PREDEFINED_COLORS)
+
+                material = Material(color=random_color)
+
+                self.objects.append(GameObject(position, material, rotation=(rotation_x, rotation_y, rotation_z), scale=scale))
+
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
