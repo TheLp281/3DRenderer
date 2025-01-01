@@ -13,16 +13,23 @@ git clone https://github.com/TheLp281/3DRenderer
 cd 3DRenderer
 ```
 
-##Set Up the Virtual Environment
-#Windows
+## Set Up the Virtual Environment
+
+#### Windows
+```sh
 python -m venv venv
 venv\Scripts\activate
-#Linux
+```
+# Linux
+```sh
 python -m venv venv
 source venv/bin/activate
-
-##Install dependencies
+```
+## Install Dependencies
+```sh
 pip install -r requirements.txt
-
-##Run
+```
+## Run
+```sh
 python main.py
+```
