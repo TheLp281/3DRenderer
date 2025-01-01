@@ -1,3 +1,4 @@
+# game_object.py
 from OpenGL.GL import *
 from graphics.texture_loader import load_texture
 from settings import TEXTURE_FOLDER
@@ -20,11 +21,12 @@ class GameObject:
         self.rotation_matrix_z = matrix44.create_from_z_rotation(self.rotation[2])
         self.scale_matrix = matrix44.create_from_scale(self.scale)
 
-    def render(self, model_loc, shader_program):
+    def render(self, model_loc, shader_program, is_skybox=False):
         model = self.translation_matrix @ self.rotation_matrix_x @ self.rotation_matrix_y @ self.rotation_matrix_z @ self.scale_matrix
         glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
 
-        glUniform1f(glGetUniformLocation(shader_program, "wrap_factor"), self.wrap_factor)
+        if is_skybox:
+            glUniform1f(glGetUniformLocation(shader_program, "wrap_factor"), self.wrap_factor)
 
         if self.material.texture_id:
             glBindTexture(GL_TEXTURE_2D, self.material.texture_id)
@@ -34,7 +36,6 @@ class GameObject:
             glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0) 
 
         glDrawElements(GL_TRIANGLES, cube.indices.size, GL_UNSIGNED_INT, None)
-
 
     def update_position(self, new_position):
         self.position = new_position
@@ -51,4 +52,4 @@ class GameObject:
         self.scale_matrix = matrix44.create_from_scale(self.scale) 
 
     def update_wrap_factor(self, new_wrap_factor):
-        self.wrap_factor = new_wrap_factor 
+        self.wrap_factor = new_wrap_factor

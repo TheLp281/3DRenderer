@@ -28,3 +28,26 @@ void main()
     color = texture(texture1, tiled_coords);
 }
 """
+skybox_vertex_shader = """
+#version 330 core
+layout(location = 0) in vec3 position;
+uniform mat4 projection;
+uniform mat4 view;
+out vec3 TexCoords;
+void main()
+{
+    gl_Position = projection * view * vec4(position, 1.0);
+    TexCoords = position;
+}
+"""
+
+skybox_fragment_shader = """
+#version 330 core
+in vec3 TexCoords;
+out vec4 color;
+uniform samplerCube skybox;
+void main()
+{
+    color = texture(skybox, TexCoords);
+}
+"""

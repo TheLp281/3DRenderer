@@ -5,7 +5,7 @@ from settings import WALK_SPEED, SPRINT_MULTIPLIER, YAW, PITCH
 
 class Character:
     def __init__(self, position, camera_up, camera_front):
-        self.camera_pos = Vector3(position)  # Ensure position is a Vector3
+        self.camera_pos = Vector3(position)
         self.camera_up = camera_up
         self.camera_front = camera_front
 

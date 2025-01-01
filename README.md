@@ -1,6 +1,7 @@
 # 3D Renderer
 
-A powerful and efficient 3D rendering engine written in Python. This project allows you to render 3D graphics using various techniques and algorithms.
+A basic 3D rendering engine with opengl written in Python.
+![3D Renderer Example](https://github.com/TheLp281/3DRenderer/raw/main/images/example.png)
 
 ## Quickstart
 

@@ -2,10 +2,11 @@
 import pygame
 from pyrr import vector3
 from settings import SENSITIVITY
-from math import sin,cos,radians
+from math import sin, cos, radians
 class InputHandler:
-    def __init__(self):
+    def __init__(self, renderer):
         self.last_mouse_pos = None
+        self.renderer = renderer  
 
     def process_input(self, keys):
         movement_input = {
@@ -13,7 +14,7 @@ class InputHandler:
             's': keys[pygame.K_s],
             'a': keys[pygame.K_a],
             'd': keys[pygame.K_d],
-            'shift': keys[pygame.K_LSHIFT],
+            'shift': keys[pygame.K_LSHIFT]
         }
         return movement_input
 
@@ -55,4 +56,3 @@ class InputHandler:
         camera_front = vector3.normalize(front)
 
         return yaw, pitch, camera_front
-input_handler = InputHandler()
