@@ -1,6 +1,6 @@
 # main.py
 import pygame
-from settings import DESIRED_FPS, GRID_SIZE, W_HEIGHT, W_WIDTH
+from settings import DESIRED_FPS, GRID_SIZE, W_HEIGHT, W_WIDTH,TILE_SPACING
 from objects.game_object import GameObject
 from inputs.input_handler import InputHandler
 from graphics.renderer import Renderer
@@ -17,7 +17,6 @@ class Game:
             (W_WIDTH, W_HEIGHT), pygame.RESIZABLE | pygame.OPENGL | pygame.DOUBLEBUF
         )
         self.objects = []
-        self.TILE_SPACING = 1
         self._initialize_objects()
         self.input_handler = InputHandler(None)  
 
@@ -36,8 +35,8 @@ class Game:
             for j in range(GRID_SIZE[1]):
                 offset_x = uniform(-1, 1) 
                 offset_y = uniform(-1, 1) 
-                position = (i * self.TILE_SPACING + offset_x, 
-                            j * self.TILE_SPACING + offset_y, 0.0)
+                position = (i * TILE_SPACING + offset_x, 
+                            j * TILE_SPACING + offset_y, 0.0)
                         
                 rotation_x = uniform(85, 95)
                 rotation_y = uniform(0, 180)
