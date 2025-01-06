@@ -11,8 +11,17 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            pyinstaller-args: ""
+          - os: windows-latest
+            pyinstaller-args: "--onefile --windowed"
+          - os: macos-latest
+            pyinstaller-args: ""
 
     steps:
     - uses: actions/checkout@v4
@@ -27,25 +36,34 @@ jobs:
     - name: Build executable with PyInstaller
       run: |
         python -m pip install pyinstaller
-        pyinstaller --onefile main.py
+        pyinstaller ${{ matrix.pyinstaller-args }} main.py
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: application
+        name: application-${{ matrix.os }}
         path: dist/main
 
   release:
     needs: build
-    runs-on: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Download Build Artifact
+    - name: Download Build Artifacts
       uses: actions/download-artifact@v3
       with:
-        name: application
-    - name: Upload Release Assets
-      uses: actions/upload-artifact@v3
+        name: application-ubuntu-latest
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v3
       with:
-        name: release-application
-        path: dist/main
+        name: application-windows-latest
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: application-macos-latest
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: |
+          dist/main-ubuntu-latest
+          dist/main-windows-latest
+          dist/main-macos-latest
