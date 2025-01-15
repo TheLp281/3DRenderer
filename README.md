@@ -5,7 +5,7 @@ A basic 3D rendering engine with opengl written in Python.
 
 ## Quickstart
 
-Follow the steps below to get started with the 3D Renderer:
+Follow the steps below to run 3D Renderer:
 
 ### Clone the Repository
 ```sh
@@ -15,14 +15,14 @@ cd 3DRenderer
 
 ## Set Up the Virtual Environment
 
-#### Windows
-```sh
 python -m venv venv
+
+# Windows
+```sh
 venv\Scripts\activate
 ```
 # Linux
 ```sh
-python -m venv venv
 source venv/bin/activate
 ```
 ## Install Dependencies
